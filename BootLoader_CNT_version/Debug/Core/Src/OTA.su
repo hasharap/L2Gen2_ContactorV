@@ -1,0 +1,4 @@
+../Core/Src/OTA.c:7:17:GetPage	0	static
+../Core/Src/OTA.c:26:10:Write_Data	32	static
+../Core/Src/OTA.c:83:6:Read_Data	8	static
+../Core/Src/OTA.c:97:6:Erase_APP_Slot	16	static

@@ -1,0 +1,11 @@
+../Core/Src/rtc.c:30:6:MX_RTC_Init	16	static
+../Core/Src/rtc.c:83:6:HAL_RTC_MspInit	16	static
+../Core/Src/rtc.c:102:6:HAL_RTC_MspDeInit	0	static
+../Core/Src/rtc.c:183:6:initRTC	0	static
+../Core/Src/rtc.c:232:10:RTC_ToEpoch	16	static
+../Core/Src/rtc.c:263:6:RTC_FromEpoch	32	static
+../Core/Src/rtc.c:318:6:get_date	16	static
+../Core/Src/rtc.c:326:6:get_alarm	8	static
+../Core/Src/rtc.c:337:6:updateRTC	16	static
+../Core/Src/rtc.c:376:6:updateAlarm	32	static
+../Core/Src/rtc.c:416:6:checkWeekday_Time	20	static

@@ -1,0 +1,4 @@
+../Core/Src/OTA.c:7:17:GetPage	4
+../Core/Src/OTA.c:26:10:Write_Data	5
+../Core/Src/OTA.c:83:6:Read_Data	2
+../Core/Src/OTA.c:97:6:Erase_APP_Slot	2
