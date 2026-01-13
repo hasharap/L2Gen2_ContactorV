@@ -2,7 +2,7 @@
 ../Core/Src/control_pilot.c:98:6:cpCalibrate_save	1
 ../Core/Src/control_pilot.c:108:6:getCP_voltage	14
 ../Core/Src/control_pilot.c:245:6:cpCalibrate	2
-../Core/Src/control_pilot.c:323:6:load_balance	17
+../Core/Src/control_pilot.c:323:6:load_balance	4
 ../Core/Src/control_pilot.c:453:6:monitor_cp	9
 ../Core/Src/control_pilot.c:474:6:setCP_duty	10
 ../Core/Src/control_pilot.c:536:6:check_diode	6

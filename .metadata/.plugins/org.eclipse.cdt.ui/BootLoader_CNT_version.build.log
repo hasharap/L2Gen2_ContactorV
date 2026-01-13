@@ -1,24 +1,24 @@
-17:43:07 **** Incremental Build of configuration Debug for project BootLoader_CNT_version ****
-make -j8 all 
+15:58:26 **** Incremental Build of configuration Debug for project BootLoader_CNT_version ****
+make -j12 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -Os -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
 ../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:118:17: warning: implicit declaration of function 'send_response' [-Wimplicit-function-declaration]
-  118 |                 send_response(OTA_ACK);
+../Core/Src/main.c:124:17: warning: implicit declaration of function 'send_response' [-Wimplicit-function-declaration]
+  124 |                 send_response(OTA_ACK);
       |                 ^~~~~~~~~~~~~
 ../Core/Src/main.c: In function 'HAL_UART_RxCpltCallback':
-../Core/Src/main.c:292:33: warning: implicit declaration of function 'frame_Handle' [-Wimplicit-function-declaration]
-  292 |                                 frame_Handle(Rx_Dataframe);
+../Core/Src/main.c:319:33: warning: implicit declaration of function 'frame_Handle' [-Wimplicit-function-declaration]
+  319 |                                 frame_Handle(Rx_Dataframe);
       |                                 ^~~~~~~~~~~~
 ../Core/Src/main.c: At top level:
-../Core/Src/main.c:307:6: warning: conflicting types for 'frame_Handle'; have 'void(uint8_t *)' {aka 'void(unsigned char *)'}
-  307 | void frame_Handle(uint8_t *Frame) {
+../Core/Src/main.c:334:6: warning: conflicting types for 'frame_Handle'; have 'void(uint8_t *)' {aka 'void(unsigned char *)'}
+  334 | void frame_Handle(uint8_t *Frame) {
       |      ^~~~~~~~~~~~
-../Core/Src/main.c:292:33: note: previous implicit declaration of 'frame_Handle' with type 'void(uint8_t *)' {aka 'void(unsigned char *)'}
-  292 |                                 frame_Handle(Rx_Dataframe);
+../Core/Src/main.c:319:33: note: previous implicit declaration of 'frame_Handle' with type 'void(uint8_t *)' {aka 'void(unsigned char *)'}
+  319 |                                 frame_Handle(Rx_Dataframe);
       |                                 ^~~~~~~~~~~~
 ../Core/Src/main.c: In function 'frame_Handle':
-../Core/Src/main.c:362:83: warning: passing argument 2 of 'Write_Data' from incompatible pointer type [-Wincompatible-pointer-types]
-  362 |                                 APPLICATION_LOCATION + application_write_idx, data->data, 4, 0);
+../Core/Src/main.c:389:83: warning: passing argument 2 of 'Write_Data' from incompatible pointer type [-Wincompatible-pointer-types]
+  389 |                                 APPLICATION_LOCATION + application_write_idx, data->data, 4, 0);
       |                                                                               ~~~~^~~~~~
       |                                                                                   |
       |                                                                                   uint8_t * {aka unsigned char *}
@@ -27,15 +27,15 @@ In file included from ../Core/Src/main.c:27:
    35 | uint32_t Write_Data(uint32_t StartAddress, uint32_t *Data, uint16_t WordSize,
       |                                            ~~~~~~~~~~^~~~
 ../Core/Src/main.c: At top level:
-../Core/Src/main.c:401:6: warning: conflicting types for 'send_response'; have 'void(uint8_t)' {aka 'void(unsigned char)'}
-  401 | void send_response(uint8_t is_success) {
+../Core/Src/main.c:428:6: warning: conflicting types for 'send_response'; have 'void(uint8_t)' {aka 'void(unsigned char)'}
+  428 | void send_response(uint8_t is_success) {
       |      ^~~~~~~~~~~~~
-../Core/Src/main.c:118:17: note: previous implicit declaration of 'send_response' with type 'void(uint8_t)' {aka 'void(unsigned char)'}
-  118 |                 send_response(OTA_ACK);
+../Core/Src/main.c:124:17: note: previous implicit declaration of 'send_response' with type 'void(uint8_t)' {aka 'void(unsigned char)'}
+  124 |                 send_response(OTA_ACK);
       |                 ^~~~~~~~~~~~~
 ../Core/Src/main.c: In function 'send_response':
-../Core/Src/main.c:411:36: warning: passing argument 2 of 'HAL_UART_Transmit' from incompatible pointer type [-Wincompatible-pointer-types]
-  411 |         HAL_UART_Transmit(&huart3, &response, 8, HAL_MAX_DELAY);
+../Core/Src/main.c:438:36: warning: passing argument 2 of 'HAL_UART_Transmit' from incompatible pointer type [-Wincompatible-pointer-types]
+  438 |         HAL_UART_Transmit(&huart1, &response, 8, HAL_MAX_DELAY);
       |                                    ^~~~~~~~~
       |                                    |
       |                                    OTA_RESP_ *
@@ -53,13 +53,13 @@ arm-none-eabi-size  BootLoader_CNT_version.elf
 arm-none-eabi-objdump -h -S BootLoader_CNT_version.elf  > "BootLoader_CNT_version.list"
 arm-none-eabi-objcopy  -O binary BootLoader_CNT_version.elf  "BootLoader_CNT_version.bin"
    text	   data	    bss	    dec	    hex	filename
-   9408	    108	   2128	  11644	   2d7c	BootLoader_CNT_version.elf
+   9512	    108	   2128	  11748	   2de4	BootLoader_CNT_version.elf
 Finished building: default.size.stdout
  
 Finished building: BootLoader_CNT_version.bin
- 
 Finished building: BootLoader_CNT_version.list
  
+ 
 
-17:43:11 Build Finished. 0 errors, 6 warnings. (took 3s.334ms)
+15:58:27 Build Finished. 0 errors, 6 warnings. (took 748ms)
 

@@ -46,7 +46,7 @@ void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 9600;
+  huart1.Init.BaudRate = 115200;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -58,7 +58,7 @@ void MX_USART1_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART1_Init 2 */
-  HAL_UART_Receive_IT(&huart1, (uint8_t*) &serialRxPort2, 1); // start uart rx process
+  HAL_UART_Receive_IT(&huart1, (uint8_t*) &serialRxPort1, 1); // start uart rx process
   /* USER CODE END USART1_Init 2 */
 
 }
@@ -75,7 +75,7 @@ void MX_USART3_UART_Init(void)
 
   /* USER CODE END USART3_Init 1 */
   huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
+  huart3.Init.BaudRate = 9600;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;
@@ -87,7 +87,7 @@ void MX_USART3_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART3_Init 2 */
-  HAL_UART_Receive_IT(&huart3, (uint8_t*) &serialRxPort1, 1); // start uart rx process
+  HAL_UART_Receive_IT(&huart3, (uint8_t*) &serialRxPort2, 1); // start uart rx process
   /* USER CODE END USART3_Init 2 */
 
 }
@@ -223,7 +223,8 @@ static void huart1TransmitIT(uint8_t *pData, uint16_t Length)
 	UART_HandleTypeDef *huart = &huart1;
 	if (HAL_UART_Transmit_IT(huart, pData, Length) == HAL_OK)
 	{
-		serialPort2TxCount++; // now Modbus is on UART1
+		serialPort2TxCount++; // now CSMS is on UART3
+
 	}
 	else
 	{
@@ -236,7 +237,7 @@ static void huart3TransmitIT(uint8_t *pData, uint16_t Length)
 	UART_HandleTypeDef *huart = &huart3;
 	if (HAL_UART_Transmit_IT(huart, pData, Length) == HAL_OK)
 	{
-		serialPort1TxCount++; // now CSMS is on UART3
+		serialPort1TxCount++; // now Modbus is on UART1
 	}
 	else
 	{
@@ -246,36 +247,38 @@ static void huart3TransmitIT(uint8_t *pData, uint16_t Length)
 
 void transmitSerial(void)
 {
-	CSMS_transmitSerial(huart3TransmitIT);         // Now CSMS is on UART3
-	ModbusRTU_transmitSerial(huart1TransmitIT);    // Now Modbus is on UART1
+	CSMS_transmitSerial(huart1TransmitIT);         // Now CSMS is on UART3
+	ModbusRTU_transmitSerial(huart3TransmitIT);    // Now Modbus is on UART1
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 #if SERIAL_ACTIVE
-	if (huart == &huart3) // CSMS now on UART3
+	if (huart == &huart1) // CSMS now on UART1
 	{
 		serialRxPort1 = huart->Instance->DR;
 
 		CSMS_receiveSerial((char*) &serialRxPort1);
 
-		if(HAL_UART_Receive_IT(&huart3, (uint8_t*) &serialRxPort1, 1)!=HAL_OK)
+		if(HAL_UART_Receive_IT(&huart1, (uint8_t*) &serialRxPort1, 1)!=HAL_OK)
 		{
-			HAL_UART_AbortReceive_IT(&huart3);
-			HAL_UART_Receive_IT(&huart3, (uint8_t*) &serialRxPort1, 1);
+			HAL_UART_AbortReceive_IT(&huart1);
+			HAL_UART_Receive_IT(&huart1, (uint8_t*) &serialRxPort1, 1);
 		}
-
 		//HAL_UART_Receive_IT(&huart3, (uint8_t*) &serialRxPort1, 1);
 		serialPort1RxCount++;
+
+
 	}
 #endif
-	if (huart == &huart1) // Modbus now on UART1
-	{
+	if (huart == &huart3) // Modbus now on UART3
+     {
 		serialRxPort2 = huart->Instance->DR;
 
 		ModbusRTU_receiveSerial((char*) &serialRxPort2);
-		HAL_UART_Receive_IT(&huart1, (uint8_t*) &serialRxPort2, 1);
+		HAL_UART_Receive_IT(&huart3, (uint8_t*) &serialRxPort2, 1);
 		serialPort2RxCount++;
+
 	}
 }
 
@@ -294,7 +297,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
-	if (huart == &huart3)
+	if (huart == &huart1)
 	    {
 	        // Clear errors and restart
 	        __HAL_UART_CLEAR_OREFLAG(huart);

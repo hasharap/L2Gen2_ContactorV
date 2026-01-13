@@ -46,7 +46,7 @@
 /* Private variables ---------------------------------------------------------*/
 IWDG_HandleTypeDef hiwdg;
 
-UART_HandleTypeDef huart3;
+UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 
@@ -64,8 +64,8 @@ OTA_STATE_ ota_state = OTA_STATE_IDLE;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_USART3_UART_Init(void);
 static void MX_IWDG_Init(void);
+static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 static void goto_application(void);
 /* USER CODE END PFP */
@@ -104,14 +104,20 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART3_UART_Init();
-  //MX_IWDG_Init();
+  //  MX_IWDG_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
     memset(Rx_Dataframe, 0, 23);
- 	HAL_UART_Receive_IT(&huart3, Rx_Dataframe, 1);
+ 	HAL_UART_Receive_IT(&huart1, Rx_Dataframe, 1);
+
+ 	//comment
+// 	RxVal[0] = 0x03 ;
+//	Write_Data(CONFIGURATION_LOCATION, RxVal, 1, 1);
+ 	//comment
+
   	Read_Data(CONFIGURATION_LOCATION, RxVal, 1);
 
-   // RxVal[0]=0x03;
+
 
   	if (RxVal[0] == 0x10)
   	{
@@ -159,11 +165,14 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -173,7 +182,7 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
@@ -201,7 +210,7 @@ static void MX_IWDG_Init(void)
   /* USER CODE END IWDG_Init 1 */
   hiwdg.Instance = IWDG;
   hiwdg.Init.Prescaler = IWDG_PRESCALER_256;
-  hiwdg.Init.Reload = 4095;
+  hiwdg.Init.Reload = 780;
   if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
   {
     Error_Handler();
@@ -213,35 +222,35 @@ static void MX_IWDG_Init(void)
 }
 
 /**
-  * @brief USART3 Initialization Function
+  * @brief USART1 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_USART3_UART_Init(void)
+static void MX_USART1_UART_Init(void)
 {
 
-  /* USER CODE BEGIN USART3_Init 0 */
+  /* USER CODE BEGIN USART1_Init 0 */
 
-  /* USER CODE END USART3_Init 0 */
+  /* USER CODE END USART1_Init 0 */
 
-  /* USER CODE BEGIN USART3_Init 1 */
+  /* USER CODE BEGIN USART1_Init 1 */
 
-  /* USER CODE END USART3_Init 1 */
-  huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
-  huart3.Init.WordLength = UART_WORDLENGTH_8B;
-  huart3.Init.StopBits = UART_STOPBITS_1;
-  huart3.Init.Parity = UART_PARITY_NONE;
-  huart3.Init.Mode = UART_MODE_TX_RX;
-  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart3) != HAL_OK)
+  /* USER CODE END USART1_Init 1 */
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 115200;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart1) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN USART3_Init 2 */
+  /* USER CODE BEGIN USART1_Init 2 */
 
-  /* USER CODE END USART3_Init 2 */
+  /* USER CODE END USART1_Init 2 */
 
 }
 
@@ -252,13 +261,31 @@ static void MX_USART3_UART_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
   /* USER CODE BEGIN MX_GPIO_Init_1 */
 
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin : PC10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PC11 */
+  GPIO_InitStruct.Pin = GPIO_PIN_11;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure peripheral I/O remapping */
+  __HAL_AFIO_REMAP_USART3_PARTIAL();
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -271,7 +298,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	uint16_t data_len = 0;
 	uint16_t temp = 0;
  	memset(rec_crc, 0, 16);
-	if (huart == &huart3) { // check which UART peripheral generated the interrupt
+	if (huart == &huart1) { // check which UART peripheral generated the interrupt
 		HAL_IWDG_Refresh(&hiwdg);
 		if (Rx_Dataframe[0] == 0x23 || Rx_Dataframe[0] == 0xA1) {
 			HAL_IWDG_Refresh(&hiwdg);
@@ -301,7 +328,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 			index1 = 0;
 			HAL_IWDG_Refresh(&hiwdg);
 		}
-		HAL_UART_Receive_IT(&huart3, &Rx_Dataframe[index1], 1); // enable reception of the next byte
+		HAL_UART_Receive_IT(&huart1, &Rx_Dataframe[index1], 1); // enable reception of the next byte
 	}
 }
 void frame_Handle(uint8_t *Frame) {
@@ -408,7 +435,7 @@ void send_response(uint8_t is_success) {
 
 	};
 
-	HAL_UART_Transmit(&huart3, &response, 8, HAL_MAX_DELAY);
+	HAL_UART_Transmit(&huart1, &response, 8, HAL_MAX_DELAY);
 
 }
 
@@ -440,8 +467,7 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.

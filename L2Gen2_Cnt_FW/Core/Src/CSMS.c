@@ -656,6 +656,7 @@ static void CSMS_getmSerial(const char* restrict data, uint8_t length)
 		 ---------------------------------------------------*/
 		case 0:
 			networkSide_data.maxCurrent_req = data1;
+			break;
 
 		/*---------------------------------------------------
 		 Check for OTA update flag - check message ID = 100 (Dec)
